@@ -51,13 +51,19 @@ Add a repository secret named `SNYK_TOKEN` with a Snyk API token. The workflow w
 
 The demo app contains deliberate vulnerabilities to confirm that each pipeline check works as expected. Do not copy these patterns into production code:
 
-- **Vulnerable dependency (`"lodash": "^4.17.4"`):** Intentionally locked to an outdated release in [`package.json`](file:///c:/Users/rahil/OneDrive/Documents/Coding%20Projects/Automated%20DevSecops%20Pipeline/secure%20pipeline/package.json) with known vulnerabilities (including Prototype Pollution and ReDoS). This allows **Snyk** to detect dependency risks and **Dependabot** to trigger automated remediation pull requests.
+- **Vulnerable dependency (`"lodash": "^4.17.4"`):** Intentionally locked to an outdated release in [`package.json`] with known vulnerabilities (including Prototype Pollution and ReDoS). This allows **Snyk** to detect dependency risks and **Dependabot** to trigger automated remediation pull requests.
 - **Hard-coded secrets (`app.js`):** Example AWS keys from documentation used to verify **TruffleHog** secret scanning.
 - **Remote Code Execution (`app.js`):** An unsanitized `eval()` endpoint (`/calculate`) used to verify **CodeQL** static analysis alerts.
 
 ## Viewing results
 
 After a push or pull request, open the repository's **Actions** tab to see each workflow run. CodeQL and Snyk results appear under **Security → Code scanning alerts** when GitHub code scanning is available for the repository.
+
+## Screenshots
+
+<img width="1311" height="27" alt="Screenshot 2026-09-11 210445" src="https://github.com/user-attachments/assets/752a933e-b27d-4b6b-8b36-b58493d71f51" />
+<img width="1402" height="867" alt="Screenshot 2026-09-11 210549" src="https://github.com/user-attachments/assets/f2cda82a-db71-4992-8eaf-4fb624f485ab" />
+<img width="1491" height="172" alt="Screenshot 2026-09-11 210603" src="https://github.com/user-attachments/assets/866eaf43-8c92-4b3d-b224-b2b82e5a2e74" />
 
 ## License
 
