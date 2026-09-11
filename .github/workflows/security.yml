@@ -1,0 +1,65 @@
+name: Security Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  secret-scan:
+    name: Secret scanning
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with: 
+          fetch-depth: 0
+
+      - name: trufflehog checkout
+        uses: trufflesecurity/trufflehog@main
+        with:
+         path: ./
+         extra_args: --results=verified,unknown,unverified
+  
+  dependency-scan:
+    name: Snyk scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Set up Node js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install Dependencies
+        run: 'npm ci'
+
+      - name: Run Snyk
+        uses: snyk/actions/node@v1
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif
+      
+      - name: Upload SARIF on Github
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: snyk.sarif
+
+          
+    
+    
+
+
